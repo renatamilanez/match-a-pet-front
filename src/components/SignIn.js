@@ -24,7 +24,7 @@ export default function SignIn() {
       password
     };
 
-    const promise = axios.post(`${URL_BASE}/sign-in`, data);
+    const promise = axios.post(`${URL_BASE}sign-in`, data);
     promise.then(res => {
       localStorage.setItem('match-a-pet-token', res.data.token);
       setUserToken(localStorage.getItem('userToken'));

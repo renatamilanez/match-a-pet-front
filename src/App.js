@@ -9,6 +9,7 @@ import { useState } from 'react';
 import GlobalStyles from './assets/GlobalStyles.js';
 import SignIn from './components/SignIn';
 import Enroll from './components/Enroll.js';
+import Feed from './components/Feed.js';
 
 export default function App() {
   const [userToken, setUserToken] = useState(
@@ -41,6 +42,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<SignIn />} />
             <Route path="/enroll" element={<Enroll />} />
+            <Route path="/home" element={<Feed />} />
           </Routes> 
         </Router>
       </UserContext.Provider>

@@ -39,7 +39,7 @@ export default function Enroll() {
       toast('Selecione um tipo de usuário!');
     }
 
-    const promise = axios.post(`${URL_BASE}/${signUrl}`, data);
+    const promise = axios.post(`${URL_BASE}${signUrl}`, data);
     promise.then(res => {
       navigate('/');
       setEmail('');
