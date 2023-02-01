@@ -28,7 +28,7 @@ export default function SignIn() {
     promise.then(res => {
       localStorage.setItem('match-a-pet-token', res.data.token);
       setUserToken(localStorage.getItem('userToken'));
-      navigate('/home');
+      navigate('/');
       setEmail('');
       setPassword(''); 
     });
@@ -46,7 +46,7 @@ export default function SignIn() {
         <Input placeholder='senha' type='password' name='password' required onChange={(e) => setPassword(e.target.value)} value={password}/>
         <Button>Entrar</Button>
       </Form>
-      <Link to='/enroll'>
+      <Link to='/registrar'>
         <Title>Não tem uma conta? Cadastre-se!</Title>
       </Link>
     </Container>

@@ -1,12 +1,20 @@
 import styled from 'styled-components';
 import { HiOutlineMenuAlt2 } from 'react-icons/hi';
 import { BsPerson } from 'react-icons/bs';
+import { useNavigate } from 'react-router-dom';
 
 export default function Head() {
+  const navigate = useNavigate();
+
+  function openEnrollPage() {
+    navigate('/cadastro');
+  }
+
   return (
     <Container>
       <MenuIcon>{HiOutlineMenuAlt2}</MenuIcon>
-      <PersonIcon>{BsPerson}</PersonIcon>
+      <Title>Match-a-Pet</Title>
+      <PersonIcon onClick={openEnrollPage}>{BsPerson}</PersonIcon>
     </Container>
   );
 }
@@ -41,4 +49,9 @@ const PersonIcon = styled(BsPerson)`
   &:hover {
     cursor: pointer;
   }
+`;
+
+const Title = styled.h4`
+  color: #ffffff;
+  font-size: 18px;
 `;

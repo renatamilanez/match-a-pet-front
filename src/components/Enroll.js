@@ -71,7 +71,7 @@ export default function Enroll() {
         </Select>
         <Button>Entrar</Button>
       </Form>
-      <Link to='/'>
+      <Link to='/entrar'>
         <Title>Já tem uma conta? Faça login!</Title>
       </Link>
     </Container>
