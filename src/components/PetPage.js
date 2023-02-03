@@ -6,15 +6,33 @@ import { IoCloseSharp } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import image from '../assets/dog-image.jpeg';
 import { FaRegHeart } from 'react-icons/fa';
+import { useContext } from 'react';
+import UserContext from '../contexts/UserContext';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export default function PetPage() {
+  const {
+    petData, URL_BASE, config
+  } = useContext(UserContext);
+
   const navigate = useNavigate();
   
-  function registerLike() {
-    //adicionar contador de likes na tabela do pet
-    //adicionar pet na lista de MyPet do usuário
+  async function registerLike() {
+    let count = petData.countLikes;
+    count += 1;
 
-    console.log('oi');
+    const data = {
+      petId: petData.id,
+      count
+    };
+
+    try {
+      await axios.post(`${URL_BASE}user/myPets`, data, config);
+      toast(`${petData.name} foi adicionado à sua lista para adoção!`);
+    } catch (error) {
+      toast('Ooops, algo deu errado, tente novamente!');
+    }
   }
 
   function openEnrollPage() {
@@ -49,11 +67,11 @@ export default function PetPage() {
       </PhotoContainer>
       <DescriptionContainer>
         <Text>Oi, meu nome é</Text>
-        <Title>Caramelo</Title>
-        <Text>Atualmente eu moro em São Paulo.</Text>
-        <Text>Eu tenho 4 anos.</Text>
-        <Text>Sou vacinado e castrado.</Text>
-        <Text>Sou um golden com orgulho.</Text>
+        <Title>{petData.name}</Title>
+        <Text>Atualmente eu moro em {petData.Host.state}.</Text>
+        <Text>Eu tenho {petData.age} anos.</Text>
+        {petData.isVaccinated === true ? <Text>Já sou vacinado.</Text> : <Text>Ainda não sou vacinado.</Text>}
+        <Text>Sou um {petData.race} com orgulho.</Text>
       </DescriptionContainer>
     </>
   );

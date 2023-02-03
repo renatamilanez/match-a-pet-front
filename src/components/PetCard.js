@@ -1,22 +1,25 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import image from '../assets/dog-image.jpeg';
+import { useContext } from 'react';
+import UserContext from '../contexts/UserContext';
 
-export default function PetCard() {
+export default function PetCard(pet) {
+  const {
+    petData, setPetData
+  } = useContext(UserContext);
+
   const navigate = useNavigate();
 
-  const hostId = 1;
-  const petId = 1;
-
   function openPetPage() {
-    navigate(`/pet/${hostId}/${petId}`);
+    setPetData(pet);
+    navigate(`/pet/${petData.id}`);
   }
 
   return(
     <>
       <Container>
-        <img src={image}/>
-        <Name onClick={openPetPage}>Caramelo</Name>
+        <img src={pet.picture}/>
+        <Name onClick={openPetPage}>{pet.name}</Name>
       </Container>
     </>
   );
@@ -62,4 +65,3 @@ const Name = styled.div`
   color: #000000;
   cursor: pointer;
 `;
-

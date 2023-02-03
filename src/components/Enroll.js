@@ -32,14 +32,15 @@ export default function Enroll() {
     let signUrl = '';
 
     if(userType === 'Quero adotar!') {
-      signUrl = 'user-enroll';
+      signUrl = 'user';
     } else if(userType === 'Quero colocar para adoção!') {
-      signUrl = 'host-enroll';
+      signUrl = 'host';
     } else {
       toast('Selecione um tipo de usuário!');
     }
 
-    const promise = axios.post(`${URL_BASE}${signUrl}`, data);
+    console.log(`${URL_BASE}${signUrl}/enroll`);
+    const promise = axios.post(`${URL_BASE}${signUrl}/enroll`, data);
     promise.then(res => {
       navigate('/');
       setEmail('');

@@ -8,7 +8,8 @@ import axios from 'axios';
 
 export default function SignIn() {
   const {
-    setUserToken,
+    userType, setUserType,
+    userToken, setUserToken,
     email, setEmail,
     password, setPassword,
     URL_BASE
@@ -19,15 +20,27 @@ export default function SignIn() {
   function handleForm(e) {
     e.preventDefault();
 
+    let type = '';
+
+    if(userType === 'Quero adotar!') {
+      type = 'user';
+    } else if(userType === 'Quero colocar para adoção!') {
+      type = 'host';
+    } else {
+      toast('Selecione um tipo de usuário!');
+    }
+
     const data = {
       email,
-      password
+      password,
+      userType: type
     };
 
     const promise = axios.post(`${URL_BASE}sign-in`, data);
     promise.then(res => {
       localStorage.setItem('match-a-pet-token', res.data.token);
-      setUserToken(localStorage.getItem('userToken'));
+      setUserToken(localStorage.getItem('match-a-pet-token'));
+      console.log('token', userToken);
       navigate('/');
       setEmail('');
       setPassword(''); 
@@ -42,6 +55,11 @@ export default function SignIn() {
     <Container>
       <Image src={logo} />
       <Form onSubmit={handleForm}>
+        <Select value={userType} required onChange={(e) => setUserType(e.target.value)}>
+          <option disabled selected value> -- Selecione um tipo de usuário -- </option>
+          <option>Quero adotar!</option>
+          <option>Quero colocar para adoção!</option>
+        </Select>
         <Input placeholder='email' type='email' name='email' required onChange={(e) => setEmail(e.target.value)} value={email}/>
         <Input placeholder='senha' type='password' name='password' required onChange={(e) => setPassword(e.target.value)} value={password}/>
         <Button>Entrar</Button>
@@ -111,4 +129,18 @@ const Form = styled.form`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+`;
+
+const Select = styled.select`
+    width: 80vw;
+    height: 45px;
+    background-color: var(--color-dark-grey);
+    border-radius: 20px;
+    border: 1px solid #d4d4d4;
+    background-color: #ffffff;
+    color: #d4d4d4;
+    font-size: 14px;
+    font-weight: 400;
+    padding: 20px;
+    margin-bottom: 6px;
 `;

@@ -7,12 +7,11 @@ import UserContext from '../contexts/UserContext';
 export default function Filter() {
   const [type, setType] = useState('Pet');
   const [types, setTypes] = useState([]);
-  //const types = ['Cachorro', 'Gato', 'Pássaro', 'Outros', 'Não tenho certeza'];
 
-  const { URL_BASE } = useContext(UserContext);
+  const { URL_BASE, config } = useContext(UserContext);
 
   useEffect(() => {
-    const promise = axios.get(`${URL_BASE}pet-types`);
+    const promise = axios.get(`${URL_BASE}pets/types`, config);
     promise.then(res => {
       setTypes(res.data);
     });

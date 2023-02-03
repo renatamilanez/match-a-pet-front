@@ -7,10 +7,10 @@ import PetCard from './PetCard';
 export default function Cards() {
   const [cards, setCards] = useState([]);
 
-  const { URL_BASE } = useContext(UserContext);
+  const { URL_BASE, config } = useContext(UserContext);
 
   useEffect(() => {
-    const promise = axios.get(`${URL_BASE}pets`);
+    const promise = axios.get(`${URL_BASE}pets`, config);
     promise.then((res) => {
       setCards(res.data);
     });
@@ -18,9 +18,9 @@ export default function Cards() {
 
   return(
     <Container>
-      {cards.length === 0 ? <PetCard></PetCard> : 
+      {cards.length === 0 ? <></>: 
         cards.map((card, i) => {
-          <></>;
+          <PetCard card={card} key={i}/>;
         })}
     </Container>
   );

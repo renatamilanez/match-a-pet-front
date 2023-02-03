@@ -22,8 +22,15 @@ export default function App() {
   const [state, setState] = useState('');
   const [name, setName] = useState('');
   const [userType, setUserType] = useState('');
+  const [petData, setPetData] = useState({}); 
 
   const URL_BASE = process.env.REACT_APP_API_BASE_URL;
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${userToken}`,
+    },
+  };
 
   const contextValue = {
     userToken, setUserToken,
@@ -32,7 +39,8 @@ export default function App() {
     state, setState,
     name, setName,
     userType, setUserType,
-    URL_BASE
+    petData, setPetData,
+    URL_BASE, config
   };
 
   return (
