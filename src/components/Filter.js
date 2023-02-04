@@ -5,24 +5,25 @@ import axios from 'axios';
 import UserContext from '../contexts/UserContext';
 
 export default function Filter() {
-  const [type, setType] = useState('Pet');
-  const [types, setTypes] = useState([]);
-
-  const { URL_BASE, config } = useContext(UserContext);
+  const { type, types, setTypes, URL_BASE, config } = useContext(UserContext);
 
   useEffect(() => {
     const promise = axios.get(`${URL_BASE}pets/types`, config);
-    promise.then(res => {
-      setTypes(res.data);
-    });
+    promise
+      .then(res => {
+        setTypes(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   return (
     <Container>
       <Title>É hora de escolher seu <a>#{type}</a></Title>
       <AlignButtons>
-        {types.map((name, i) => {
-          return(<ButtonFilter type={type} setType={setType} name={name} key={i}/>);
+        {types.map((item, i) => {
+          return(<ButtonFilter item={item} key={i}/>);
         })}
       </AlignButtons>
     </Container>

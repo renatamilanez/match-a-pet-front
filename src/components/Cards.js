@@ -5,26 +5,33 @@ import UserContext from '../contexts/UserContext';
 import PetCard from './PetCard';
 
 export default function Cards() {
-  const [cards, setCards] = useState([]);
-
-  const { URL_BASE, config } = useContext(UserContext);
+  const { cards, setCards, URL_BASE, config } = useContext(UserContext);
 
   useEffect(() => {
-    const promise = axios.get(`${URL_BASE}pets`, config);
-    promise.then((res) => {
-      setCards(res.data);
-    });
-  }, []);
+    async function getPets() {
+      const pets = await axios.get(`${URL_BASE}pets`, config);
+      setCards(pets.data);
+    }
+    getPets();
+  }, [setCards]);
 
   return(
     <Container>
-      {cards.length === 0 ? <></>: 
-        cards.map((card, i) => {
-          <PetCard card={card} key={i}/>;
+      {cards === null ? <Text>Ainda não há nenhum pet disponível para adoção...</Text> : 
+        cards.map((item, i) => {
+          return(
+            <PetCard item={item} key={i}/>
+          );
         })}
     </Container>
   );
 }
+
+const Text = styled.h4`
+  color: #ffffff;
+  font-size: 14px;
+  margin-top: 14px;
+`;
 
 const Container = styled.div`
   width: 100%;

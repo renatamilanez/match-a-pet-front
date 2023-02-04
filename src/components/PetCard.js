@@ -2,24 +2,20 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useContext } from 'react';
 import UserContext from '../contexts/UserContext';
+import { useEffect } from 'react';
 
-export default function PetCard(pet) {
-  const {
-    petData, setPetData
-  } = useContext(UserContext);
-
+export default function PetCard({ item }) {
   const navigate = useNavigate();
 
   function openPetPage() {
-    setPetData(pet);
-    navigate(`/pet/${petData.id}`);
+    navigate(`/pet/${item.id}`);
   }
 
   return(
     <>
       <Container>
-        <img src={pet.picture}/>
-        <Name onClick={openPetPage}>{pet.name}</Name>
+        <img src={item.picture}/>
+        <Name onClick={openPetPage}>{item.name}</Name>
       </Container>
     </>
   );

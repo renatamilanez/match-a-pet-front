@@ -22,9 +22,14 @@ export default function App() {
   const [state, setState] = useState('');
   const [name, setName] = useState('');
   const [userType, setUserType] = useState('');
-  const [petData, setPetData] = useState({}); 
+  const [petData, setPetData] = useState([]);
+  const [types, setTypes] = useState([]);
+  const [cards, setCards] = useState(null);
+  const [type, setType] = useState('Pet');
 
-  const URL_BASE = process.env.REACT_APP_API_BASE_URL;
+  //const URL_BASE = `http://${process.env.REACT_APP_API_BASE_URL}`;
+
+  const URL_BASE = `${process.env.REACT_APP_API_BASE_URL}`;
 
   const config = {
     headers: {
@@ -40,6 +45,9 @@ export default function App() {
     name, setName,
     userType, setUserType,
     petData, setPetData,
+    types, setTypes,
+    cards, setCards,
+    type, setType,
     URL_BASE, config
   };
 
@@ -53,7 +61,7 @@ export default function App() {
             <Route path="/entrar" element={<SignIn />} />
             <Route path="/registrar" element={<Enroll />} />
             <Route path="/" element={<Feed />} />
-            <Route path="/pet/:hostId/:petId" element={<PetPage />} />
+            <Route path="/pet/:petId" element={<PetPage />} />
             <Route path="/cadastro" element={<Enrollment />} />
           </Routes> 
         </Router>

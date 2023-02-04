@@ -3,20 +3,35 @@ import { BsPerson } from 'react-icons/bs';
 import { MdKeyboardArrowLeft } from 'react-icons/md';
 import { FaHeart } from 'react-icons/fa';
 import { IoCloseSharp } from 'react-icons/io5';
-import { useNavigate } from 'react-router-dom';
-import image from '../assets/dog-image.jpeg';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FaRegHeart } from 'react-icons/fa';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import UserContext from '../contexts/UserContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
 export default function PetPage() {
+  const { petId } = useParams();
+
   const {
-    petData, URL_BASE, config
+    petData, setPetData, URL_BASE, config
   } = useContext(UserContext);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const promise = axios.get(`${URL_BASE}pets/id/${petId}`);
+    promise
+      .then(res => {
+        console.log('oi');
+        setPetData(res.data);
+        console.log(petData);
+      })
+      .catch(error => {
+        toast('Ooops, algo deu errado, tente novamente!');
+        navigate('/');
+      });
+  }, []);
   
   async function registerLike() {
     let count = petData.countLikes;
@@ -28,7 +43,7 @@ export default function PetPage() {
     };
 
     try {
-      await axios.post(`${URL_BASE}user/myPets`, data, config);
+      await axios.post(`${URL_BASE}user/mypets`, data, config);
       toast(`${petData.name} foi adicionado à sua lista para adoção!`);
     } catch (error) {
       toast('Ooops, algo deu errado, tente novamente!');
@@ -54,25 +69,29 @@ export default function PetPage() {
         <Text>Pesquisa</Text>
         <PersonIcon onClick={openEnrollPage} />
       </Head>
-      <PhotoContainer>
-        <ImageBox>
-          <img src={image}/>
-          <LikeButton onClick={registerLike}>
-            <LikeIcon />
-          </LikeButton>
-          <CloseButton onClick={exitPage}>
-            <CloseIcon />
-          </CloseButton>
-        </ImageBox>
-      </PhotoContainer>
-      <DescriptionContainer>
-        <Text>Oi, meu nome é</Text>
-        <Title>{petData.name}</Title>
-        <Text>Atualmente eu moro em {petData.Host.state}.</Text>
-        <Text>Eu tenho {petData.age} anos.</Text>
-        {petData.isVaccinated === true ? <Text>Já sou vacinado.</Text> : <Text>Ainda não sou vacinado.</Text>}
-        <Text>Sou um {petData.race} com orgulho.</Text>
-      </DescriptionContainer>
+      {petData.length === 0 ? <p>oi</p> : 
+        <>
+          <PhotoContainer>
+            <ImageBox>
+              <img src={petData.picture}/>
+              <LikeButton onClick={registerLike}>
+                <LikeIcon />
+              </LikeButton>
+              <CloseButton onClick={exitPage}>
+                <CloseIcon />
+              </CloseButton>
+            </ImageBox>
+          </PhotoContainer>
+          <DescriptionContainer>
+            <Text>Oi, meu nome é</Text>
+            <Title>{petData.name}</Title>
+            <Text>Atualmente eu moro em {petData.state}.</Text>
+            <Text>Eu tenho {petData.age} anos.</Text>
+            {petData.isVaccinated === true ? <Text>Já sou vacinado.</Text> : <Text>Ainda não sou vacinado.</Text>}
+            <Text>Sou um {petData.race} com orgulho.</Text>
+          </DescriptionContainer>
+        </>
+      }
     </>
   );
 }
@@ -120,7 +139,7 @@ const LikeButton = styled.div`
   border-top-left-radius: 50%;
   border-bottom-left-radius: 50%;
   border: 1px solid #47f0c4;
-  opacity: 0.9;
+  opacity: 0.7;
 `;
 
 const CloseButton = styled.div`
@@ -136,7 +155,7 @@ const CloseButton = styled.div`
   border-top-right-radius: 50%;
   border-bottom-right-radius: 50%;
   border: 1px solid #ffffff;
-  opacity: 0.9;
+  opacity: 0.7;
 `;
 
 const Head = styled.div`
