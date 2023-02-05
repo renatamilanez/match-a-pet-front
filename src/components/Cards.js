@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import axios from 'axios';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useContext } from 'react';
 import UserContext from '../contexts/UserContext';
 import PetCard from './PetCard';
 
@@ -38,4 +38,5 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding: 24px;
+  padding-top: 0;
 `;

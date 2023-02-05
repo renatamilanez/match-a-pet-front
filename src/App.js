@@ -12,6 +12,8 @@ import Enroll from './components/Enroll.js';
 import Feed from './components/Feed.js';
 import PetPage from './components/PetPage.js';
 import Enrollment from './components/Enrollment.js';
+import MyPets from './components/MyPets.js';
+import PetForm from './components/PetForm.js';
 
 export default function App() {
   const [userToken, setUserToken] = useState(
@@ -26,8 +28,9 @@ export default function App() {
   const [types, setTypes] = useState([]);
   const [cards, setCards] = useState(null);
   const [type, setType] = useState('Pet');
-
-  //const URL_BASE = `http://${process.env.REACT_APP_API_BASE_URL}`;
+  const [isMenuVisible, setIsMenuVisible] = useState(false);
+  const [userTypeForm, setUserTypeForm] = useState('');
+  const [favorites, setFavorites] = useState(null);
 
   const URL_BASE = `${process.env.REACT_APP_API_BASE_URL}`;
 
@@ -48,6 +51,9 @@ export default function App() {
     types, setTypes,
     cards, setCards,
     type, setType,
+    isMenuVisible, setIsMenuVisible,
+    userTypeForm, setUserTypeForm,
+    favorites, setFavorites,
     URL_BASE, config
   };
 
@@ -63,6 +69,8 @@ export default function App() {
             <Route path="/" element={<Feed />} />
             <Route path="/pet/:petId" element={<PetPage />} />
             <Route path="/cadastro" element={<Enrollment />} />
+            <Route path="/favoritos" element={<MyPets />} />
+            <Route path="/pets/cadastros" element={<PetForm />} />
           </Routes> 
         </Router>
       </UserContext.Provider>

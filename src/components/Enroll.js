@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import styled from 'styled-components';
 import logo from '../assets/logo4.png';
 import UserContext from '../contexts/UserContext';
@@ -14,6 +14,7 @@ export default function Enroll() {
     password, setPassword,
     state, setState,
     name, setName,
+    userTypeForm, setUserTypeForm,
     URL_BASE
   } = useContext(UserContext);
 
@@ -29,18 +30,15 @@ export default function Enroll() {
       state
     };
 
-    let signUrl = '';
-
-    if(userType === 'Quero adotar!') {
-      signUrl = 'user';
-    } else if(userType === 'Quero colocar para adoção!') {
-      signUrl = 'host';
+    if(userTypeForm === 'Quero adotar!') {
+      setUserType('user');
+    } else if(userTypeForm === 'Quero colocar para adoção!') {
+      setUserType('host');
     } else {
       toast('Selecione um tipo de usuário!');
     }
 
-    console.log(`${URL_BASE}${signUrl}/enroll`);
-    const promise = axios.post(`${URL_BASE}${signUrl}/enroll`, data);
+    const promise = axios.post(`${URL_BASE}${userType}/enroll`, data);
     promise.then(res => {
       navigate('/');
       setEmail('');
@@ -65,7 +63,7 @@ export default function Enroll() {
         <Select value={state} required onChange={(e) => setState(e.target.value)}>
           <UFsList />
         </Select>
-        <Select value={userType} required onChange={(e) => setUserType(e.target.value)}>
+        <Select value={userTypeForm} required onChange={(e) => setUserTypeForm(e.target.value)}>
           <option disabled selected value> -- Selecione um tipo de usuário -- </option>
           <option>Quero adotar!</option>
           <option>Quero colocar para adoção!</option>

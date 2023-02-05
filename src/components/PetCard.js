@@ -1,8 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { useContext } from 'react';
-import UserContext from '../contexts/UserContext';
-import { useEffect } from 'react';
 
 export default function PetCard({ item }) {
   const navigate = useNavigate();
@@ -14,7 +11,7 @@ export default function PetCard({ item }) {
   return(
     <>
       <Container>
-        <img src={item.picture}/>
+        <img alt={''} src={item.picture}/>
         <Name onClick={openPetPage}>{item.name}</Name>
       </Container>
     </>

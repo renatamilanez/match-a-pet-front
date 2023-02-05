@@ -1,8 +1,9 @@
 import styled from 'styled-components';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useContext } from 'react';
 import ButtonFilter from './ButtonFilter';
 import axios from 'axios';
 import UserContext from '../contexts/UserContext';
+import { toast } from 'react-toastify';
 
 export default function Filter() {
   const { type, types, setTypes, URL_BASE, config } = useContext(UserContext);
@@ -14,13 +15,13 @@ export default function Filter() {
         setTypes(res.data);
       })
       .catch((error) => {
-        console.log(error);
+        toast('Ooops, algo deu errado, tente novamente!');
       });
   }, []);
 
   return (
     <Container>
-      <Title>É hora de escolher seu <a>#{type}</a></Title>
+      <Title>É hora de escolher seu <span>#{type}</span></Title>
       <AlignButtons>
         {types.map((item, i) => {
           return(<ButtonFilter item={item} key={i}/>);
@@ -43,8 +44,8 @@ const Title = styled.h1`
   color: #ffffff;
   margin-bottom: 10px;
 
-  a {
-    color: #fbb80b;
+  span {
+    color: #9a8fe2;
   }
 `;
 
@@ -53,25 +54,4 @@ const AlignButtons = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-`;
-
-const Button = styled.button`
-  height: 40px;
-  background-color: ${(props) => {
-    if(props.click === false) {
-      return '#282425';
-    } if(props.click === true) {
-      return '47f0c4';
-    }
-  }
-};
-  color: #ffffff;
-  font-size: 18px;
-  border-radius: 36px;
-  padding: 24px 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #282425;
-  margin: 6px;
 `;

@@ -9,9 +9,10 @@ import axios from 'axios';
 export default function SignIn() {
   const {
     userType, setUserType,
-    userToken, setUserToken,
+    setUserToken,
     email, setEmail,
     password, setPassword,
+    userTypeForm, setUserTypeForm,
     URL_BASE
   } = useContext(UserContext);
 
@@ -20,30 +21,28 @@ export default function SignIn() {
   function handleForm(e) {
     e.preventDefault();
 
-    let type = '';
-
-    if(userType === 'Quero adotar!') {
-      type = 'user';
-    } else if(userType === 'Quero colocar para adoção!') {
-      type = 'host';
-    } else {
+    if(userTypeForm === 'Quero adotar!') {
+      setUserType('user');
+    } else if(userTypeForm === 'Quero colocar para adoção!') {
+      setUserType('host');
+    } else if(userType === '') {
       toast('Selecione um tipo de usuário!');
     }
 
     const data = {
       email,
       password,
-      userType: type
+      userType: userType
     };
 
     const promise = axios.post(`${URL_BASE}sign-in`, data);
     promise.then(res => {
       localStorage.setItem('match-a-pet-token', res.data.token);
       setUserToken(localStorage.getItem('match-a-pet-token'));
-      console.log('token', userToken);
       navigate('/');
       setEmail('');
-      setPassword(''); 
+      setPassword('');
+      setUserType(data.userType);
     });
 
     promise.catch(res => {
@@ -55,7 +54,7 @@ export default function SignIn() {
     <Container>
       <Image src={logo} />
       <Form onSubmit={handleForm}>
-        <Select value={userType} required onChange={(e) => setUserType(e.target.value)}>
+        <Select value={userTypeForm} required onChange={(e) => setUserTypeForm(e.target.value)}>
           <option disabled selected value> -- Selecione um tipo de usuário -- </option>
           <option>Quero adotar!</option>
           <option>Quero colocar para adoção!</option>

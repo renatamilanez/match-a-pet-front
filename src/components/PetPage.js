@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { BsPerson } from 'react-icons/bs';
-import { MdKeyboardArrowLeft } from 'react-icons/md';
 import { FaHeart } from 'react-icons/fa';
 import { IoCloseSharp } from 'react-icons/io5';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -9,12 +8,15 @@ import { useContext, useEffect } from 'react';
 import UserContext from '../contexts/UserContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import Head from './Head';
 
 export default function PetPage() {
   const { petId } = useParams();
 
   const {
-    petData, setPetData, URL_BASE, config
+    petData, setPetData, 
+    isMenuVisible, setIsMenuVisible, 
+    URL_BASE, config, 
   } = useContext(UserContext);
 
   const navigate = useNavigate();
@@ -23,9 +25,7 @@ export default function PetPage() {
     const promise = axios.get(`${URL_BASE}pets/id/${petId}`);
     promise
       .then(res => {
-        console.log('oi');
         setPetData(res.data);
-        console.log(petData);
       })
       .catch(error => {
         toast('Ooops, algo deu errado, tente novamente!');
@@ -50,10 +50,6 @@ export default function PetPage() {
     }
   }
 
-  function openEnrollPage() {
-    navigate('/cadastro');
-  }
-
   function openFavoriteList() {
     navigate('/favoritos');
   }
@@ -64,16 +60,12 @@ export default function PetPage() {
 
   return(
     <>
-      <Head>
-        <FavoriteIcon onClick={openFavoriteList} />
-        <Text>Pesquisa</Text>
-        <PersonIcon onClick={openEnrollPage} />
-      </Head>
-      {petData.length === 0 ? <p>oi</p> : 
+      <Head isVisible={ isMenuVisible } />
+      {petData.length === 0 ? <></> : 
         <>
           <PhotoContainer>
             <ImageBox>
-              <img src={petData.picture}/>
+              <img alt={''} src={petData.picture}/>
               <LikeButton onClick={registerLike}>
                 <LikeIcon />
               </LikeButton>
@@ -158,38 +150,6 @@ const CloseButton = styled.div`
   opacity: 0.7;
 `;
 
-const Head = styled.div`
-  width: 100%;
-  height: 70px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 10;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-left: 24px;
-  padding-right: 24px;
-`;
-
-const ReturnIcon = styled(MdKeyboardArrowLeft)`
-  font-size: 28px;
-  color: #ffffff;
-
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-const PersonIcon = styled(BsPerson)`
-  font-size: 28px;
-  color: #ffffff;
-
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
 const LikeIcon = styled(FaHeart)`
   font-size: 18px;
   color: #ffffff;
@@ -234,13 +194,4 @@ const Title = styled.h2`
   color: #ffffff;
   margin-left: 36px;
   margin-bottom: 36px;
-`;
-
-const FavoriteIcon = styled(FaRegHeart)`
-  font-size: 22px;
-  color: #ffffff;
-
-  &:hover {
-    cursor: pointer;
-  }
 `;
