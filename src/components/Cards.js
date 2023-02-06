@@ -5,7 +5,7 @@ import UserContext from '../contexts/UserContext';
 import PetCard from './PetCard';
 
 export default function Cards() {
-  const { cards, setCards, URL_BASE, config } = useContext(UserContext);
+  const { cards, setCards, URL_BASE, config, userType, type } = useContext(UserContext);
 
   useEffect(() => {
     async function getPets() {
@@ -13,18 +13,33 @@ export default function Cards() {
       setCards(pets.data);
     }
     getPets();
-  }, [setCards]);
+  }, [type, cards]);
 
-  return(
-    <Container>
-      {cards === null ? <Text>Ainda não há nenhum pet disponível para adoção...</Text> : 
-        cards.map((item, i) => {
-          return(
-            <PetCard item={item} key={i}/>
-          );
-        })}
-    </Container>
-  );
+  if(userType === 'user') {
+    return(
+      <Container>
+        {cards === null ? <Text>Ainda não há nenhum pet disponível para adoção...</Text> : 
+          cards.map((item, i) => {
+            return(
+              <PetCard item={item} key={i}/>
+            );
+          })}
+      </Container>
+    );
+  }
+
+  if(userType === 'host') {
+    return(
+      <Container>
+        {cards === null ? <Text>Você ainda não adicionou nenhum pet para adoção...</Text> : 
+          cards.map((item, i) => {
+            return(
+              <PetCard item={item} key={i}/>
+            );
+          })}
+      </Container>
+    );
+  }
 }
 
 const Text = styled.h4`

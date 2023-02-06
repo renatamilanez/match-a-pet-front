@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { FaHeart } from 'react-icons/fa';
 import { IoCloseSharp } from 'react-icons/io5';
+import { TbPencil } from 'react-icons/tb';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useContext, useEffect } from 'react';
 import UserContext from '../contexts/UserContext';
@@ -10,17 +11,19 @@ import Head from './Head';
 
 export default function PetPage() {
   const { petId } = useParams();
+  const navigate = useNavigate();
 
   const {
     petData, setPetData, 
     isMenuVisible, 
+    userType, setUserType,
     URL_BASE, config, 
   } = useContext(UserContext);
 
-  const navigate = useNavigate();
+  setUserType(localStorage.getItem('match-a-pet-user'));
 
   useEffect(() => {
-    const promise = axios.get(`${URL_BASE}pets/id/${petId}`);
+    const promise = axios.get(`${URL_BASE}pets/id/${petId}`, config);
     promise
       .then(res => {
         setPetData(res.data);
@@ -52,10 +55,6 @@ export default function PetPage() {
     }
   }
 
-  function openFavoriteList() {
-    navigate('/favoritos');
-  }
-
   function exitPage() {
     navigate('/');
   }
@@ -68,9 +67,13 @@ export default function PetPage() {
           <PhotoContainer>
             <ImageBox>
               <img alt={''} src={petData.picture}/>
-              <LikeButton onClick={registerLike}>
-                <LikeIcon />
-              </LikeButton>
+              {userType === 'user' ?
+                <LikeButton onClick={registerLike}> 
+                  <LikeIcon />
+                </LikeButton>
+                : <LikeButton onClick={() => navigate('/pets/cadastros')}>
+                  <EditIcon />
+                </LikeButton>}
               <CloseButton onClick={exitPage}>
                 <CloseIcon />
               </CloseButton>
@@ -164,6 +167,15 @@ const LikeIcon = styled(FaHeart)`
 const CloseIcon = styled(IoCloseSharp)`
   font-size: 22px;
   color: #000000;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const EditIcon = styled(TbPencil)`
+  font-size: 22px;
+  color: #ffffff;
 
   &:hover {
     cursor: pointer;

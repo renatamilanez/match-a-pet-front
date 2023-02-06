@@ -12,11 +12,10 @@ import SignIn from './components/SignIn';
 import Enroll from './components/Enroll.js';
 import Feed from './components/Feed.js';
 import PetPage from './components/PetPage.js';
-import Enrollment from './components/Enrollment.js';
+import Profile from './components/Profile.js';
 import MyPets from './components/MyPets.js';
 import PetForm from './components/PetForm.js';
 import useToken from './hooks/useToken';
-import useUserType from './hooks/useUserType';
 
 export default function App() {
   return (
@@ -31,9 +30,9 @@ export default function App() {
             <Route element={<ProtectedRouteGuard />}>
               <Route path="/" element={<Feed />} />
               <Route path="/pet/:petId" element={<PetPage />} />
-              <Route path="/cadastro" element={<Enrollment />} />
               <Route path="/pets/cadastros" element={<PetForm />} />
               <Route path="/favoritos" element={<MyPets />} />
+              <Route path="/perfil" element={<Profile />} />
             </Route>
           </Routes> 
         </Router>
@@ -47,6 +46,7 @@ function ProtectedRouteGuard() {
 
   if (!token) {
     toast('Faça o login para acessar.');
+    localStorage.clear();
     return <Navigate to="/entrar" />;
   }
 

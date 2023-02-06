@@ -7,15 +7,13 @@ export default function ButtonFilter({ item }) {
   const [isClicked, setIsClicked] = useState(false);
   const { type, setType, setCards, URL_BASE, config } = useContext(UserContext);
 
-  const name = item.name[0].toUpperCase() + item.name.substring(1);
-
-  function getPetsByFilter(name) {
+  function getPetsByFilter(item) {
     setIsClicked(!isClicked);
 
     if(item.name === 'Não tenho certeza' || item.name === 'Outros') {
       setType('Pet');
     }
-    setType(name);
+    setType(item.name);
 
     if(type !== 'Pet') {
       const promise = axios.get(`${URL_BASE}pets/type/${item.name}`, config);
@@ -26,7 +24,7 @@ export default function ButtonFilter({ item }) {
     }
   }
   return (
-    <Button isClicked={isClicked} onClick={() => getPetsByFilter(name)}>{name}</Button>
+    <Button isClicked={isClicked} onClick={() => getPetsByFilter(item)}>{item.name}</Button>
   );
 }
 

@@ -27,11 +27,16 @@ export default function Menu() {
       });
   }
 
+  function goToProfile() {
+    setIsMenuVisible(false);
+    navigate('/perfil');
+  }
+
   return (
     <>
       <Container isVisible={isMenuVisible}>
         <nav>
-          <Item onClick={() => navigate('/perfil')}>Meu perfil</Item>
+          <Item onClick={goToProfile}>Meu perfil</Item>
           <Item onClick={signOut}>Sair</Item>
         </nav>
         <CloseIcon onClick={() => setIsMenuVisible(false)}/>

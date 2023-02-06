@@ -4,15 +4,35 @@ import { useContext } from 'react';
 import UserContext from '../contexts/UserContext';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function PetEnroll() {
-  const { URL_BASE } = useContext(UserContext);
+  const { userType, setUserType, URL_BASE, config } = useContext(UserContext);
+  const [hostPets, setHostPets] = useState(null);
+  const navigate = useNavigate();
 
-  function deletePet() {
-    const promise = axios.delete(`${URL_BASE}pets/:petId`);
+  if(userType === 'user') {
+    navigate('/entrar');
+    setUserType(null);
+    localStorage.clear();
+  }
+
+  async function getPets() {
+    const pets = await axios.get(`${URL_BASE}pets`, config);
+    setHostPets(pets.data);
+  }
+
+  useEffect(() => {
+    getPets();
+  }, [hostPets]);
+
+  function deletePet(id) {
+    const promise = axios.delete(`${URL_BASE}pets/${id}`, config);
     promise
       .then(() => {
         toast('Pet deletado com sucesso!');
+        getPets();
       })
       .catch(() => {
         toast('Ooops, algo deu errado! Tente novamente!');
@@ -20,18 +40,24 @@ export default function PetEnroll() {
   }
 
   return(
-    <PetCard>
-      <Image alt={''}></Image>
-      <AlignItems>
-        <Name>Caramelo</Name>
-        <SubTitle>Vacinado:</SubTitle>
-        <SubTitle>Raça:</SubTitle>
-        <SubTitle>Idade:</SubTitle>
-        <SubTitle>Disponível:</SubTitle>
-        <SubTitle>Likes:</SubTitle>
-      </AlignItems>
-      <TrashIcon onClick={deletePet}/>
-    </PetCard>
+    <>
+      {hostPets === null ? (<p>oi</p>) :
+        (hostPets.map((pet, i) => {
+          return(
+            <PetCard key={i}>
+              <Image alt={''} src={pet.picture}></Image>
+              <AlignItems>
+                <Name>{pet.name}</Name>
+                <SubTitle>Vacinado: {pet.isVaccinated === true ? 'Sim' : 'Não'}</SubTitle>
+                <SubTitle>Raça: {pet.race}</SubTitle>
+                <SubTitle>Idade: {pet.age}</SubTitle>
+                <SubTitle>Likes: {pet.countLikes}</SubTitle>
+              </AlignItems>
+              <TrashIcon onClick={() => deletePet(pet.id)}/>
+            </PetCard>
+          );
+        }))}
+    </>
   );
 }
 

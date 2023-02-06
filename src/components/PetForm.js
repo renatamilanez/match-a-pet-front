@@ -26,8 +26,29 @@ export default function PetForm() {
     localStorage.clear();
   }
 
+  async function createNewPet(data) {
+    try {
+      await axios.post(`${URL_BASE}pets`, data, config);
+      toast('Pet adicionado com sucesso!');
+      setFormVisible(false);
+      setName('');
+      setAge('');
+      setRace('');
+      setPicture('');
+      setAnimalType(null);
+      setVaccine(null);
+    } catch (error) {
+      console.log(error);
+      toast('Ooops, algo deu errado! Tente novamente!');
+    }
+  }
+
   function handleForm(e) {
     e.preventDefault();
+
+    if(animalType.length < 4) {
+      toast('Selecione o tipo de animal');
+    }
 
     let isVaccinated = false;
     if(vaccine === 'Sim') {
@@ -40,18 +61,10 @@ export default function PetForm() {
       race,
       picture,
       isVaccinated,
-      animalType,
+      petType: animalType,
     };
 
-    const promise = axios.post(`${URL_BASE}pets`, data, config);
-    promise
-      .then(() => {
-        toast('Pet adicionado com sucesso!');
-        formVisible(false);
-      })
-      .catch(() => {
-        toast('Ooops, algo deu errado! Tente novamente!');
-      });
+    createNewPet(data);
   }
 
   return (
@@ -70,7 +83,7 @@ export default function PetForm() {
             <Select value={animalType} required onChange={(e) => setAnimalType(e.target.value)}>
               <option disabled selected value> -- Selecione o tipo de animal -- </option>
               {types.map((item, i) => {
-                <option key={i}>{item.name}</option>;
+                return (<option key={i}>{item.name}</option>);
               })}
             </Select>
             <Label>O pet é vacinado?</Label>
@@ -83,8 +96,7 @@ export default function PetForm() {
           </nav>
         </FormContainer>
         <nav>
-          <PetEnroll>
-          </PetEnroll>
+          <PetEnroll />
         </nav>
       </Container>
     </>
@@ -134,6 +146,9 @@ const FormContainer = styled.form`
     opacity: 1;
     pointer-events: auto;
     height: 425px;
+
+    transition: .5s;
+    transform: translateX(1px);
     
     > svg {
       transform: rotate(180deg);
