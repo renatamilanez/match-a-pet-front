@@ -39,10 +39,11 @@ export default function SignIn() {
     promise.then(res => {
       localStorage.setItem('match-a-pet-token', res.data.token);
       setUserToken(localStorage.getItem('match-a-pet-token'));
+      localStorage.setItem('match-a-pet-user', userType);
+      setUserType(localStorage.getItem('match-a-pet-user'));
       navigate('/');
       setEmail('');
       setPassword('');
-      setUserType(data.userType);
     });
 
     promise.catch(res => {
@@ -54,6 +55,7 @@ export default function SignIn() {
     <Container>
       <Image src={logo} />
       <Form onSubmit={handleForm}>
+        <Label>Selecione um tipo de usuário:</Label>
         <Select value={userTypeForm} required onChange={(e) => setUserTypeForm(e.target.value)}>
           <option disabled selected value> -- Selecione um tipo de usuário -- </option>
           <option>Quero adotar!</option>
@@ -80,27 +82,34 @@ const Container = styled.div`
     height: 100vh;
 `;
 
+const Label = styled.label`
+  color: #d4d4d4;
+  font-size: 14px;
+  margin-bottom: 4px;
+  margin-left: 28px;
+`;
+
 const Image = styled.img`
     width: 180px;
     margin-bottom: 32px;
 `;
 
 const Input = styled.input`
-    width: 80vw;
-    height: 45px;
-    border: 1px solid #d4d4d4;
-    margin-bottom: 6px;
-    color: #d4d4d4;
-    font-weight: 400;
-    font-size: 14px;
-    border-radius: 25px;
-    text-align: left;
-    text-justify: center;
-    padding: 20px;
-    &::placeholder{
-        color: var(--color-gray);
-        font-size: 12px;
-    }
+  width: 80vw;
+  height: 45px;
+  border: 1px solid #d4d4d4;
+  margin-bottom: 6px;
+  color: #000000;
+  font-weight: 400;
+  font-size: 14px;
+  border-radius: 25px;
+  text-align: left;
+  text-justify: center;
+  padding: 20px;
+  &::placeholder{
+      color: #d4d4d4;
+      font-size: 12px;
+  }
 `;
 
 const Button = styled.button`
@@ -127,19 +136,19 @@ const Form = styled.form`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
 `;
 
 const Select = styled.select`
     width: 80vw;
     height: 45px;
-    background-color: var(--color-dark-grey);
     border-radius: 20px;
     border: 1px solid #d4d4d4;
     background-color: #ffffff;
     color: #d4d4d4;
     font-size: 14px;
     font-weight: 400;
-    padding: 20px;
+    padding: 4px;
+    padding-left: 10px;
     margin-bottom: 6px;
 `;

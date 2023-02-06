@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import styled from 'styled-components';
 import logo from '../assets/logo4.png';
 import UserContext from '../contexts/UserContext';
@@ -39,7 +39,7 @@ export default function Enroll() {
     }
 
     const promise = axios.post(`${URL_BASE}${userType}/enroll`, data);
-    promise.then(res => {
+    promise.then(() => {
       navigate('/');
       setEmail('');
       setPassword('');
@@ -48,22 +48,24 @@ export default function Enroll() {
       setUserType('');
     });
 
-    promise.catch(res => {
+    promise.catch(() => {
       toast('Ooops! Faça o cadastro novamente!');
     });
   }
 
   return (
     <Container>
+      <Image src={logo} />
       <Form onSubmit={handleForm}>
-        <Image src={logo} />
         <Input placeholder='nome' type='text' name='name' required onChange={(e) => setName(e.target.value)} value={name}/>
         <Input placeholder='email' type='email' name='email' required onChange={(e) => setEmail(e.target.value)} value={email}/>
         <Input placeholder='senha' type='password' name='password' required onChange={(e) => setPassword(e.target.value)} value={password}/>
+        <Label>Selecione um estado:</Label>
         <Select value={state} required onChange={(e) => setState(e.target.value)}>
           <UFsList />
         </Select>
-        <Select value={userTypeForm} required onChange={(e) => setUserTypeForm(e.target.value)}>
+        <Label>Selecione um tipo de usuário:</Label>
+        <Select value={userTypeForm} required onChange={(e) => setUserTypeForm(e.target.value)} placeholder={'Selecione'}>
           <option disabled selected value> -- Selecione um tipo de usuário -- </option>
           <option>Quero adotar!</option>
           <option>Quero colocar para adoção!</option>
@@ -76,6 +78,13 @@ export default function Enroll() {
     </Container>
   );
 }
+
+const Label = styled.label`
+  color: #d4d4d4;
+  font-size: 14px;
+  margin-bottom: 4px;
+  margin-left: 28px;
+`;
 
 const Container = styled.div`
     width: 100%;
@@ -107,14 +116,14 @@ const Button = styled.button`
 const Select = styled.select`
     width: 80vw;
     height: 45px;
-    background-color: var(--color-dark-grey);
     border-radius: 20px;
     border: 1px solid #d4d4d4;
     background-color: #ffffff;
     color: #d4d4d4;
     font-size: 14px;
     font-weight: 400;
-    padding: 20px;
+    padding: 4px;
+    padding-left: 10px;
     margin-bottom: 6px;
 `;
 
@@ -148,5 +157,5 @@ const Form = styled.form`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
 `;

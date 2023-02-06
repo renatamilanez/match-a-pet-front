@@ -28,12 +28,6 @@ export default function ButtonFilter({ item }) {
   return (
     <Button isClicked={isClicked} onClick={() => getPetsByFilter(name)}>{name}</Button>
   );
-
-  return (
-    isClicked === false ? 
-      <Button className='selected' onClick={() => getPetsByFilter(name)}>{name}</Button> :
-      <Button onClick={() => getPetsByFilter(name)}>{name}</Button>
-  );
 }
 
 const Button = styled.button`

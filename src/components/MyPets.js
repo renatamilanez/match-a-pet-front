@@ -1,7 +1,6 @@
 import { useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import Head from './Head';
-import imagem from '../assets/dog-image.jpeg';
 import { IoTrashOutline } from 'react-icons/io5';
 import UserContext from '../contexts/UserContext';
 import { toast } from 'react-toastify';
@@ -9,20 +8,39 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 export default function MyPets() {
-  const { favorites, setFavorites, URL_BASE, config } = useContext(UserContext);
+  const { userType, favorites, setFavorites, URL_BASE, config } = useContext(UserContext);
   const navigate = useNavigate();
 
-  useEffect(() => {
+  if(userType !== 'user') {
+    navigate('/entrar');
+    localStorage.clear();
+  }
+  
+  function getFavorites() {
     const promise = axios.get(`${URL_BASE}user/mypets`, config);
     promise
       .then(res => {
         setFavorites(res.data);
       })
       .catch(() => {
-        toast('Ooops, algo deu errado, tente novamente!');
-        navigate('');
+        navigate('/entrar');
       });
-  }, []);
+  }
+
+  useEffect(() => {
+    getFavorites();
+  }, [favorites]);
+
+  function removeFavorite(petId) {
+    const promise = axios.delete(`${URL_BASE}user/mypets/${petId}`, config);
+    promise
+      .then(() => {
+        getFavorites();
+      })
+      .catch(error => {
+        toast('Ooops, não foi possível excluir dos favoritos, tente novamente!');
+      });
+  }
 
   return (
     <>
@@ -35,12 +53,13 @@ export default function MyPets() {
           favorites.map((fav, i) => {
             return(
               <PetCard key={i}>
-                <Image alt={''} src={fav.picture}></Image>
+                <Image alt={''} src={fav.AvailablePets}></Image>
                 <AlignItems>
-                  <Name>{fav.name}</Name>
-                  <SubTitle onClick={() => navigate(`/pet/${fav.id}`)}>Ver detalhes</SubTitle>
+                  <Name>{fav.AvailablePets.name}</Name>
+                  <SubTitle onClick={() => navigate(`/pet/${fav.AvailablePets.id}`)}>Ver detalhes</SubTitle>
+                  <SubTitle href={`mailto:${fav.AvailablePets}`}>Entrar em contato com doador.</SubTitle>
                 </AlignItems>
-                <TrashIcon />
+                <TrashIcon onClick={() => removeFavorite(fav.AvailablePets.id)}/>
               </PetCard>
             );
           })
@@ -117,7 +136,7 @@ const Name = styled.h5`
   margin-top: 12px;
 `;
 
-const SubTitle = styled.h5`
+const SubTitle = styled.a`
   color: #ffffff;
   font-size: 12px;
   margin-left: 24px;

@@ -1,9 +1,7 @@
 import styled from 'styled-components';
-import { BsPerson } from 'react-icons/bs';
 import { FaHeart } from 'react-icons/fa';
 import { IoCloseSharp } from 'react-icons/io5';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FaRegHeart } from 'react-icons/fa';
 import { useContext, useEffect } from 'react';
 import UserContext from '../contexts/UserContext';
 import axios from 'axios';
@@ -15,7 +13,7 @@ export default function PetPage() {
 
   const {
     petData, setPetData, 
-    isMenuVisible, setIsMenuVisible, 
+    isMenuVisible, 
     URL_BASE, config, 
   } = useContext(UserContext);
 
@@ -44,9 +42,13 @@ export default function PetPage() {
 
     try {
       await axios.post(`${URL_BASE}user/mypets`, data, config);
-      toast(`${petData.name} foi adicionado à sua lista para adoção!`);
+      toast(`${petData.name} foi adicionado à sua lista de favoritos!`);
     } catch (error) {
-      toast('Ooops, algo deu errado, tente novamente!');
+      if(error.response.status === 409) {
+        toast('Esse pet já está em sua lista de favoritos!');
+      } else {
+        toast('Ooops, algo deu errado, tente novamente!');
+      }
     }
   }
 

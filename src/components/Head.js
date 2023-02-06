@@ -3,14 +3,18 @@ import { BsPerson } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 import Menu from './Menu';
 import UserContext from '../contexts/UserContext';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { FaRegHeart } from 'react-icons/fa';
 import { MdPets } from 'react-icons/md';
 import { HiMenuAlt2 } from 'react-icons/hi';
 
 export default function Head() {
-  const { userType, setIsMenuVisible } = useContext(UserContext);
+  const { userType, setUserType, setIsMenuVisible } = useContext(UserContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setUserType(localStorage.getItem('match-a-pet-user'));
+  }, [userType]);
 
   function userIcon() {
     return (
