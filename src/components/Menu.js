@@ -8,16 +8,18 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 export default function Menu() {
-  const { setUserToken, isMenuVisible, setIsMenuVisible, URL_BASE, config } = useContext(UserContext);
+  const { setUserType, setUserToken, isMenuVisible, setIsMenuVisible, URL_BASE, config } = useContext(UserContext);
   const navigate = useNavigate();
 
   function signOut() {
     const promise = axios.delete(`${URL_BASE}user/sign-out`, config);
     promise
       .then(() => {
-        console.log('deletou');
         localStorage.removeItem('match-a-pet-token');
+        localStorage.removeItem('match-a-pet-user');
         setUserToken(null);
+        setUserType(null);
+        setIsMenuVisible(false);
         navigate('/entrar');
       })
       .catch(() => {

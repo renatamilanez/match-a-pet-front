@@ -9,7 +9,7 @@ import axios from 'axios';
 export default function SignIn() {
   const {
     userType, setUserType,
-    setUserToken,
+    setUserToken, setIsMenuVisible,
     email, setEmail,
     password, setPassword,
     userTypeForm, setUserTypeForm,
@@ -20,7 +20,7 @@ export default function SignIn() {
 
   function handleForm(e) {
     e.preventDefault();
-
+    
     if(userTypeForm === 'Quero adotar!') {
       setUserType('user');
     } else if(userTypeForm === 'Quero colocar para adoção!') {
@@ -41,12 +41,13 @@ export default function SignIn() {
       setUserToken(localStorage.getItem('match-a-pet-token'));
       localStorage.setItem('match-a-pet-user', userType);
       setUserType(localStorage.getItem('match-a-pet-user'));
+      setIsMenuVisible(false);
       navigate('/');
       setEmail('');
       setPassword('');
     });
 
-    promise.catch(res => {
+    promise.catch(() => {
       toast('Ooops! Faça o login novamente!');
     });
   };

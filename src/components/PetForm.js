@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function PetForm() {
   const navigate = useNavigate();
-  const { userType, URL_BASE, config } = useContext(UserContext);
+  const { types, userType, URL_BASE, config } = useContext(UserContext);
 
   const [animalType, setAnimalType] = useState('');
   const [vaccine, setVaccine] = useState('');
@@ -69,10 +69,9 @@ export default function PetForm() {
             <Label>Selecione o tipo de animal</Label>
             <Select value={animalType} required onChange={(e) => setAnimalType(e.target.value)}>
               <option disabled selected value> -- Selecione o tipo de animal -- </option>
-              <option>Cachorro</option>
-              <option>Gato</option>
-              <option>Pássaro</option>
-              <option>Outros</option>
+              {types.map((item, i) => {
+                <option key={i}>{item.name}</option>;
+              })}
             </Select>
             <Label>O pet é vacinado?</Label>
             <Select value={vaccine} required onChange={(e) => setVaccine(e.target.value)}>

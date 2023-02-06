@@ -61,6 +61,10 @@ a {
 body{
 	background-color: #1A1717;
 	font-family: 'Basic', sans-serif;
+
+	@media (min-width: 480px) {
+        display: none;
+    }
 }
 `;
 

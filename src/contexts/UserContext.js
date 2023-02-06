@@ -17,7 +17,7 @@ export function UserProvider({ children }) {
   const [cards, setCards] = useState(null);
   const [type, setType] = useState('Pet');
   const [isMenuVisible, setIsMenuVisible] = useState(false);
-  const [userTypeForm, setUserTypeForm] = useState('');
+  const [userTypeForm, setUserTypeForm] = useState('Quero adotar!');
   const [favorites, setFavorites] = useState(null);
 
   const URL_BASE = `${process.env.REACT_APP_API_BASE_URL}`;
